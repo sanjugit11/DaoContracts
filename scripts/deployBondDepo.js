@@ -11,7 +11,7 @@ async function main() {
     const treasury = "0x9A315BdF513367C0377FB36545857d12e85813Ef";
 
     const depoFactory = await ethers.getContractFactory("OlympusBondDepositoryV2");
-
+    
     const depo = await depoFactory.deploy(authority, ohm, gohm, staking, treasury);
 
     console.log("Bond Depo: " + depo.address);

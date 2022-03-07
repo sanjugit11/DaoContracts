@@ -13,6 +13,7 @@ import "./interfaces/IBondingCalculator.sol";
 import "./interfaces/ITreasury.sol";
 
 import "./types/OlympusAccessControlled.sol";
+import "hardhat/console.sol";
 
 contract OlympusTreasury is OlympusAccessControlled, ITreasury {
     /* ========== DEPENDENCIES ========== */
@@ -114,20 +115,28 @@ contract OlympusTreasury is OlympusAccessControlled, ITreasury {
         address _token,
         uint256 _profit
     ) external override returns (uint256 send_) {
+        console.log("1");
         if (permissions[STATUS.RESERVETOKEN][_token]) {
             require(permissions[STATUS.RESERVEDEPOSITOR][msg.sender], notApproved);
+                    console.log("2");
+
         } else if (permissions[STATUS.LIQUIDITYTOKEN][_token]) {
             require(permissions[STATUS.LIQUIDITYDEPOSITOR][msg.sender], notApproved);
         } else {
             revert(invalidToken);
         }
+             console.log("3");
 
         IERC20(_token).safeTransferFrom(msg.sender, address(this), _amount);
+        console.log("4");
 
         uint256 value = tokenValue(_token, _amount);
         // mint OHM needed and store amount of rewards for distribution
+                console.log("5");
+
         send_ = value.sub(_profit);
         OHM.mint(msg.sender, send_);
+                console.log("66");
 
         totalReserves = totalReserves.add(value);
 

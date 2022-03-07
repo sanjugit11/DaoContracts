@@ -1,0 +1,195 @@
+//  0x3A484993A50Ac076BC01BC585c447B08838899e5    user addr
+//  0x9810c5c97c57ef3f23d9ee06813ef7fd51e13042   bond depos reinkyby
+//  0xe2aacd013bac3ad4bdf92e1d826ae855b04db07f     treasury
+//  0x1e630a578967968eb02EF182a50931307efDa7CF      ohm
+//  0x93Cf43A7013DE26a558f1fEDb667d2b934Bb3f68     gohm
+//  0x5eD8BD53B0c3fa3dEaBd345430B1A3a6A4e8BD7C      dai
+
+OlympusAuthority          =   0x3032CC73DE6690A4CD467Ae77E0E45c6Fc3130A7
+OlympusTokenMigrator      =   0xA5eDAA20aa9e80336C81093c6BF022fe89193F81
+sOlympus                  =   0x5985F023d2827A74b913669FAEAf50db3B16aA48
+gOHM                      =   0xBc620f9Bf51fDA2C4E70b7487639bDEC707B6A7f
+OlympusERC20Token         =   0x826aA3d00656a49Fc7b24f69a38Bd55bd0737Bfc
+OlympusTreasury           =   0xa2815AB9B68c013FF360AeBf7681819E15023dE1
+OlympusBondingCalculator  =   0x8EBAAE4fbC1C28Bd9e825A3e851B23cD112A3422
+OlympusStaking            =   0x8F06b6823557ACD0aBb338dEcdeeBd2c0eF71743
+Distributor               =   0xcE5576395529ef1D3269ac277A3bD74a5D3e9782     
+OlympusBondDepositoryV2   =   0xf22C4041F00A60d817CAB8652CC762d6e74430b6
+YieldDirector             =   0xDed1EAF4eB6F6eA733EA5110C75Eb4d2dd566CC7
+DAI                       =   0xcCFE1700948Ae082985d5f8ACc09650E52ff57A6
+
+ //------------------------------------------------------------------------//
+
+ deployer = 0xc3353d180c18D2636f943C8964a526DF4f2e0dDb
+ mint ohm to the deployer  990000000000000000  99 cr
+  // Mint enough gOHM to payout rewards
+ await gOHM.mint(depository.address, "1000000000000000000000000000"); 10 cr
+
+ // Step 1: Set treasury as vault on authority
+ authorityContract.pushVault(treasury.address, true));
+
+ // Step 2: Set distributor as minter on treasury
+treasury.enable(8, distributor.address, ethers.constants.AddressZero)); // Allows distributor to mint ohm.
+   8
+   0x85C21b2e60497ff50567fDC650d677bfeD22D52B
+   0x0000000000000000000000000000000000000000
+
+ // Step 3: Set distributor on staking
+ staking.setDistributor(distributor.address));   
+ 0x85C21b2e60497ff50567fDC650d677bfeD22D52B
+
+  // Step 4: Initialize sOHM and set the index
+     sOhm.setIndex(INITIAL_INDEX)); // 46000000000
+     sOhm.setgOHM(gOhm.address));    // 0x38C8A2b54f69b9c7C863865C8FB1bdf0c50A6643
+     sOhm.initialize(staking.address, treasuryDeployment.address)); 
+         //0x459bB6dB2CaF4021521De71Be030ba618F574853
+         //0xc818ED57062b1A90B61Ab8eA6b810683F28f282f
+
+// Step 5: Set up distributor with bounty and recipient
+    distributor.setBounty(BOUNTY_AMOUNT));   //2000000000
+    distributor.addRecipient(staking.address, INITIAL_REWARD_RATE));    
+        // 0x459bB6dB2CaF4021521De71Be030ba618F574853
+        // 4000
+ //---------------------------------------------------------------------------------------------//
+
+1. mint dai to the deployer  600000000000000000000000000  6cr   daiAmount
+2. // Treasury Actions
+  treasury.enable(0, deployer, ethers.constants.AddressZero)); // Enable the deployer to deposit reserve tokens
+    0
+    0xc3353d180c18D2636f943C8964a526DF4f2e0dDb
+    0x0000000000000000000000000000000000000000
+  treasury.enable(2, daiDeployment.address, ethers.constants.AddressZero)); // Enable Dai as a reserve Token
+    2
+    0xC71f497c869b3c8D25B9a2dF9489C1B9Cf94F9c5
+    0x0000000000000000000000000000000000000000
+
+3.// Deposit and mint ohm
+ 
+  mockDai.approve(treasury.address, daiAmount)); // Approve treasury to use the dai
+    0xc818ED57062b1A90B61Ab8eA6b810683F28f282f
+    500000000000000000000000000  5cr
+  treasury.deposit(daiAmount, daiDeployment.address, INITIAL_MINT_PROFIT)); // Deposit Dai into treasury, with a profit set, so that we have reserves for staking
+    500000000000000000000000000     
+    0xC71f497c869b3c8D25B9a2dF9489C1B9Cf94F9c5
+   00 or  1000000000000      1.3 thousand  or  should be zero
+
+-----------------------from test -- bonding-----------------
+    //base supply of treasury  1489999000 *10**9
+
+    //await ohm.mint(deployer.address, "990000000000000000"); //already 99 cr
+    //myself command
+    approve depository for large dai approve
+    approve depository for large ohm approve
+ // error ..  treasury not approved
+ treasury.enable(8, depository.address, ethers.constants.AddressZero)); // Allows distributor to mint ohm.
+ 8
+ 0x60894BE716303e3BDC34309454372B3D375dD1F0
+ 0x0000000000000000000000000000000000000000
+
+set bounty
+ **********************important NOTE******************************
+ ** Bond price is we are putting while creating BOND in MARKET[1];
+-------------
+  ##max price calucaltion
+  capacityInQuoteToken = ethers.utils.formatUnits(
+      bond.capacity.mul(bondPriceBigNumber).div(Math.pow(10, 2 * BASE_TOKEN_DECIMALS - metadata.quoteDecimals)),
+      metadata.quoteDecimals,
+    );
+                         bond.capacity* bondPriceBigNumber /Math.pow(10, 2 * BASE_TOKEN_DECIMALS - metadata.quoteDecimals)),
+  capacityInQuoteToken = 8886570920846×34819387044 * 10(POW)1
+  
+  			= 3.094249524×10²³    = 309344.774162756408206286
+   
+  	
+  maxPayoutInQuoteToken = 
+  	ethers.utils.formatUnits(
+    bond.maxPayout.mul(bondPriceBigNumber).div(Math.pow(10, 2 * BASE_TOKEN_DECIMALS - metadata.quoteDecimals)),
+    metadata.quoteDecimals,
+  );
+  
+maxPayoutInQuoteToken = 2000684302*34819387044
+           	       =  6.966260106×10¹⁹ = 69.644550084144565582
+           	       
+   /home/user/Ant_demo/olympus-frontend/src/slices/BondSliceV2.ts
+   
+     if (+capacityInBaseToken < 1 || +maxPayoutInBaseToken < 1) soldOut = true;
+  const maxPayoutOrCapacityInQuote =
+    +capacityInQuoteToken > +maxPayoutInQuoteToken ? maxPayoutInQuoteToken : capacityInQuoteToken;
+    
+    =69.644550084144565582    //this is the max amount
+    ------------
+//""""""""""""""""happening in bond""""""""""""""""""""""""""
+// id=5
+_quoteToken (address)
+0xC71f497c869b3c8D25B9a2dF9489C1B9Cf94F9c5
+_market (uint256[3])
+[7777000000000,400000000000,1000000000]
+_booleans (bool[2])
+[false,true]
+_terms (uint256[2])
+[100,1649051290]
+_intervals (uint32[2])
+[600,3600]
+-------------ID 6--------------------
+_quoteToken (address)
+0xC71f497c869b3c8D25B9a2dF9489C1B9Cf94F9c5
+_market (uint256[3])
+[777788000000000,400000000000,1000000000]
+_booleans (bool[2])
+[false,true]
+_terms (uint256[2])
+[100,1649051290]
+_intervals (uint32[2])
+[600,3600]
+--------------id 7---------------
+_quoteToken (address)
+0xC71f497c869b3c8D25B9a2dF9489C1B9Cf94F9c5
+_market (uint256[3])
+[8888000000000,35000000000,1000000000]    //35 dollar bond price
+_booleans (bool[2])
+[false,true]
+_terms (uint256[2])
+[100,1649051290]
+_intervals (uint32[2])
+[600,3600]
+
+
+when we purchase bond then ,, then discount of bond get decrease and bond price also decrease ....why?
+//
+
+            ohmDeployment.address,
+            sOhmDeployment.address,
+            gOhmDeployment.address,
+            EPOCH_LENGTH_IN_BLOCKS,     //after the rebasing will occur then added again //by defaut 8 hours
+            FIRST_EPOCH_NUMBER,         //stacking can start
+            FIRST_EPOCH_TIME,
+            authorityDeployment.address,
+        ],
+
+
+
+
+        "OlympusAuthority"         0xea1207eB68743114dbcF0680b47C0Ed6B4f11D45
+        "OlympusTokenMigror"       0xB07EE77Bd781fa56AeAF7819949a9a4c6A4b72cd
+        "sOlympus"                 0xf37877Bbc4147Bd7E266179a619930C655Fb292f
+        "gOHM"                     0xe3179C4221109181Fab642DAbFF1957A70E87b36
+        "OlympusERC20Token"        0x602eF0A36072A67c3080d363C7FDa8f5885447bF
+        "OlympusTreasury"          0x7893A63EbC13Ff803C922B1f5527b0F972D56f8d
+        "OlympusBondingCalculor"   0x8AfA23676761c6F825474B1A00D2BcCc25F32894
+        "OlympusStaking"           0x1214e692da41768810fdA5676782dB33860c5147
+        "Distributor"              0x39Be8fB434682360EE48C165984e8c121b15462C
+        "OlympusBondDepositoryV2"  0xB62674d5F393F28eB910a90D8Df6ec21a7a50a2B  
+        "DAI"                      0x8300942ebf68623d303814a910A7cBea2d5519E6
+
+
+OlympusAuthority        0xB8f47bF80F3bD1f62BA60AeC8ed9FC07691D0AB0
+OlympusTokenMigrator      0xD9cA332A67eF4024CdFf91C460f80d7A1F51fCA1
+sOlympus                  0xb8AC0b808849b16bb730f5296d2C747931a462E2
+gOHM                      0x38C8A2b54f69b9c7C863865C8FB1bdf0c50A6643
+OlympusERC20Token        0x61fFd181f0CC1423576a879550a196355b209B38
+OlympusTreasury          0xc818ED57062b1A90B61Ab8eA6b810683F28f282f
+OlympusBondingCalculator  0xa362402e50a3c400E8be6F366B0F7a0A01f177c6
+ OlympusStaking             0x459bB6dB2CaF4021521De71Be030ba618F574853
+ Distributor                0x85C21b2e60497ff50567fDC650d677bfeD22D52B
+ OlympusBondDepositoryV2  0x60894BE716303e3BDC34309454372B3D375dD1F0     //depository
+ DAI                       0xC71f497c869b3c8D25B9a2dF9489C1B9Cf94F9c5

@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
+// SPDX-License-Identifier: AGPL-3.0
 pragma solidity ^0.8.10;
 
 import "./types/NoteKeeper.sol";
@@ -7,6 +7,8 @@ import "./libraries/SafeERC20.sol";
 
 import "./interfaces/IERC20Metadata.sol";
 import "./interfaces/IBondDepository.sol";
+import "hardhat/console.sol";
+
 
 /// @title Olympus Bond Depository V2
 /// @author Zeus, Indigo
@@ -276,11 +278,11 @@ contract OlympusBondDepositoryV2 is IBondDepository, NoteKeeper {
      * @return id_         ID of new bond market
      */
     function create(
-        IERC20 _quoteToken,
-        uint256[3] memory _market,
-        bool[2] memory _booleans,
-        uint256[2] memory _terms,
-        uint32[2] memory _intervals
+        IERC20 _quoteToken,          //dai address
+        uint256[3] memory _market,   //bonding amount for this bond //initial price // buffer
+        bool[2] memory _booleans,    //false true
+        uint256[2] memory _terms,    // vesting peroid in seconds //end time in epoch
+        uint32[2] memory _intervals  //kitny derr m start hoga // refershing time for price
     ) external override onlyPolicy returns (uint256 id_) {
         // the length of the program, in seconds
         uint256 secondsToConclusion = _terms[1] - block.timestamp;
@@ -293,7 +295,7 @@ contract OlympusBondDepositoryV2 is IBondDepository, NoteKeeper {
          * that will decay over in the length of the program if price remains the same).
          * it is converted into base token terms if passed in in quote token terms.
          *
-         * 1e18 = ohm decimals (9) + initial price decimals (9)
+         * 1e18 = ohm decimals (9) + initial price decimals (9)  
          */
         uint64 targetDebt = uint64(_booleans[0] ? ((_market[0] * 1e18) / _market[1]) / 10**decimals : _market[0]);
 

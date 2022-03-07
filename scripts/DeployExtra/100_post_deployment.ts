@@ -11,6 +11,8 @@ import {
     GOHM__factory,
     OlympusTreasury__factory,
     LUSDAllocator__factory,
+    OlympusBondDepositoryV2__factory,
+    DAI__factory,
 } from "../../types";
 
 // TODO: Shouldn't run setup methods if the contracts weren't redeployed.
@@ -27,6 +29,8 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     const treasuryDeployment = await deployments.get(CONTRACTS.treasury);
     const stakingDeployment = await deployments.get(CONTRACTS.staking);
     const lusdAllocatorDeployment = await deployments.get(CONTRACTS.lusdAllocator);
+    const OlympusBondDepositoryV2 = await deployments.get(CONTRACTS.bondDepo);
+    const DaiDeployment = await deployments.get(CONTRACTS.DAI);
 
     const authorityContract = await OlympusAuthority__factory.connect(
         authorityDeployment.address,
@@ -39,7 +43,9 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     const staking = OlympusStaking__factory.connect(stakingDeployment.address, signer);
     const treasury = OlympusTreasury__factory.connect(treasuryDeployment.address, signer);
     const lusdAllocator = LUSDAllocator__factory.connect(lusdAllocatorDeployment.address, signer);
-
+    const BondDepositoryV2 = OlympusBondDepositoryV2__factory.connect(OlympusBondDepositoryV2.address, signer);
+    const Dai = DAI__factory.connect(DaiDeployment.address,signer);
+    
     // Step 1: Set treasury as vault on authority
     await waitFor(authorityContract.pushVault(treasury.address, true));
     console.log("Setup -- authorityContract.pushVault: set vault on authority");

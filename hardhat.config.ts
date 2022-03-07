@@ -40,25 +40,37 @@ function getChainConfig(network: keyof typeof chainIds): NetworkUserConfig {
 }
 
 const config: HardhatUserConfig = {
-    defaultNetwork: "hardhat",
-    gasReporter: {
-        currency: "USD",
-        enabled: process.env.REPORT_GAS ? true : false,
-        excludeContracts: [],
-        src: "./contracts",
-    },
+    defaultNetwork: "rinkeby",
     networks: {
-        hardhat: {
-            forking: {
-                url: `https://eth-mainnet.alchemyapi.io/v2/${alchemyApiKey}`,
-            },
-            chainId: chainIds.hardhat,
-        },
-        // Uncomment for testing. Commented due to CI issues
-        // mainnet: getChainConfig("mainnet"),
-        // rinkeby: getChainConfig("rinkeby"),
-        // ropsten: getChainConfig("ropsten"),
+        rinkeby: {
+            url: `https://eth-rinkeby.alchemyapi.io/v2/jcCTRnlEMJA-0B6w8SBZ0L8ixybumMVj`,
+            accounts: [`0x${privateKey}`],
+
+            chainId: 4,
+        }
     },
+    //            gas: 210000000,
+    //gasPrice: 800000000000,
+    
+    // defaultNetwork: "hardhat",
+    // gasReporter: {
+    //     currency: "USD",
+    //     enabled: process.env.REPORT_GAS ? true : false,
+    //     excludeContracts: [],
+    //     src: "./contracts",
+    // },
+    // networks: {
+    //     hardhat: {
+    //         forking: {
+    //             url: `https://eth-mainnet.alchemyapi.io/v2/${alchemyApiKey}`,
+    //         },
+    //         chainId: chainIds.hardhat,
+    //     },
+    //     // Uncomment for testing. Commented due to CI issues
+    //     // mainnet: getChainConfig("mainnet"),
+    //     // rinkeby: getChainConfig("rinkeby"),
+    //     // ropsten: getChainConfig("ropsten"),
+    // },
     paths: {
         artifacts: "./artifacts",
         cache: "./cache",

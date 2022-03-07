@@ -170,8 +170,8 @@ contract OlympusStaking is OlympusAccessControlled {
     function unstake(
         address _to,
         uint256 _amount,
-        bool _trigger,
-        bool _rebasing
+        bool _trigger,     //true
+        bool _rebasing     //false  for the gohm to ohm
     ) external returns (uint256 amount_) {
         amount_ = _amount;
         uint256 bounty;

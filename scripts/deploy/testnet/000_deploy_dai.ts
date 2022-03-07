@@ -11,7 +11,7 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
 
     await deploy(CONTRACTS.DAI, {
         from: deployer,
-        args: [0],
+        args: [4],
         log: true,
         skipIfAlreadyDeployed: true,
     });
