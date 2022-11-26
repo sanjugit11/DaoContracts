@@ -21,7 +21,7 @@ yarn install
 
 # Set up environment variables (keys)
 cp .env.example .env # (linux)
-copy .env.example .env # (windows)
+cp .env.example .env # (windows)
 
 # compile solidity, the below will automatically also run yarn typechain
 yarn compile
